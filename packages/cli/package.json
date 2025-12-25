@@ -1,0 +1,13 @@
+{
+    "name": "@skyfetch/cli",
+    "version": "0.0.1",
+    "bin": {
+        "skyfetch": "./src/index.js"
+    },
+    "scripts": {
+        "dev": "node src/index.js"
+    },
+    "dependencies": {
+        "@skyfetch/shared": "*"
+    }
+}
