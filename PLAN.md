@@ -8,10 +8,10 @@
   - [x] Define `LogEvent` schema (JSDoc) in `@skyfetch/shared`
   - [x] Configure CommonJS structure
 
-- [ ] **Day 2: Express API Skeleton**
-  - [ ] Setup Express
-  - [ ] Configure Middleware (Cors, Helmet, Morgan)
-  - [ ] Create `/health` endpoint
+- [x] **Day 2: Express API Skeleton**
+  - [x] Setup Express
+  - [x] Configure Middleware (Cors, Helmet, Morgan)
+  - [x] Create `/health` endpoint
 
 - [ ] **Day 3: Ingest Endpoint**
   - [ ] Create `POST /logs/batch`
