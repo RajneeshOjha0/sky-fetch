@@ -13,10 +13,10 @@
   - [x] Configure Middleware (Cors, Helmet, Morgan)
   - [x] Create `/health` endpoint
 
-- [ ] **Day 3: Ingest Endpoint**
-  - [ ] Create `POST /logs/batch`
-  - [ ] Implement Zod validation
-  - [ ] Handle batch processing
+- [x] **Day 3: Ingest Endpoint**
+  - [x] Create `POST /logs/batch`
+  - [x] Implement Zod validation
+  - [x] Handle batch processing
 
 - [ ] **Day 4: Database Integration (MongoDB)**
   - [ ] Setup MongoDB connection (Mongoose)

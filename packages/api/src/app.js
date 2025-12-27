@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const healthRoutes = require('./routes/health');
+const logsRoutes = require('./routes/logs');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(morgan('dev'));
 
 // Routes
 app.use('/health', healthRoutes);
+app.use('/logs', logsRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
