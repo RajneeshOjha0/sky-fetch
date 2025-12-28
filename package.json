@@ -8,5 +8,7 @@
     "scripts": {
         "dev": "npm run dev --workspaces"
     },
-    "devDependencies": {}
+    "dependencies": {
+        "mongoose": "^8.20.4"
+    }
 }

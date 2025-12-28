@@ -18,10 +18,10 @@
   - [x] Implement Zod validation
   - [x] Handle batch processing
 
-- [ ] **Day 4: Database Integration (MongoDB)**
-  - [ ] Setup MongoDB connection (Mongoose)
-  - [ ] Define Log Schema in Mongoose
-  - [ ] Save valid logs to DB
+- [x] **Day 4: Database Integration (MongoDB)**
+  - [x] Setup MongoDB connection (Mongoose)
+  - [x] Define Log Schema in Mongoose
+  - [x] Save valid logs to DB
 
 - [ ] **Day 5: Search Engine (Meilisearch)**
   - [ ] Setup Meilisearch instance

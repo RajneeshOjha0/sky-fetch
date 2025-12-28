@@ -1,6 +1,12 @@
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') }); // Resolve from src/ to root
 const app = require('./app');
+const connectDB = require('./config/db');
 
 const port = process.env.PORT || 3000;
+
+// Connect to Database
+connectDB();
 
 // Verification of shared package linking
 try {

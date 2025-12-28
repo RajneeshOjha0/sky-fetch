@@ -1,3 +1,5 @@
+const Log = require('../models/log.model');
+
 /**
  * Service for handling log-related business logic
  */
@@ -8,15 +10,20 @@ class LogsService {
      * @returns {Promise<{ processed: number }>}
      */
     static async processBatch(logs) {
-        // TODO: In Day 4, we will insert these into MongoDB
-        // TODO: In Day 5, we will sync these to Meilisearch
-
         console.log(`[LogsService] Processing batch of ${logs.length} logs`);
 
-        // Simulate async processing
-        return {
-            processed: logs.length
-        };
+        try {
+            // Bulk insert for performance
+            // ordered: false ensures that if one fails, others still get inserted
+            await Log.insertMany(logs, { ordered: false });
+
+            return {
+                processed: logs.length
+            };
+        } catch (error) {
+            console.error('[LogsService] Error inserting logs:', error);
+            throw error;
+        }
     }
 }
 
