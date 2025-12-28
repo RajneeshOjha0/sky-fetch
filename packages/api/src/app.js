@@ -5,6 +5,9 @@ const morgan = require('morgan');
 const healthRoutes = require('./routes/health');
 const logsRoutes = require('./routes/logs');
 
+const AppError = require('./utils/AppError');
+const globalErrorHandler = require('./middlewares/error');
+
 const app = express();
 
 // Middleware
@@ -17,18 +20,12 @@ app.use(morgan('dev'));
 app.use('/health', healthRoutes);
 app.use('/logs', logsRoutes);
 
-// Global Error Handler
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({
-        error: 'Internal Server Error',
-        message: process.env.NODE_ENV === 'development' ? err.message : undefined
-    });
+// Handle Unhandled Routes
+app.all('*', (req, res, next) => {
+    next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-// 404 Handler
-app.use((req, res) => {
-    res.status(404).json({ error: 'Not Found' });
-});
+// Global Error Handler
+app.use(globalErrorHandler);
 
 module.exports = app;
