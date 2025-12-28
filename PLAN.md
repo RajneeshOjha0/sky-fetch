@@ -23,10 +23,10 @@
   - [x] Define Log Schema in Mongoose
   - [x] Save valid logs to DB
 
-- [ ] **Day 5: Search Engine (Meilisearch)**
-  - [ ] Setup Meilisearch instance
-  - [ ] Implement sync logic (Mongo -> Meili)
-  - [ ] Create search index configuration
+- [x] **Day 5: Search Engine (MongoDB Atlas Search)**
+  - [x] Create Search Index in Atlas UI
+  - [x] Implement `$search` aggregation pipeline
+  - [x] Create `GET /logs/search` endpoint
 
 - [ ] **Day 6: Reliability & Error Handling**
   - [ ] Global error handler

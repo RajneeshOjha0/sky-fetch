@@ -1,0 +1,29 @@
+[
+    {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "timestamp": "2025-12-28T12:00:00Z",
+        "level": "info",
+        "message": "User logged in successfully",
+        "source": "terminal",
+        "metadata": {
+            "userId": "user_123",
+            "ip": "192.168.1.1"
+        }
+    },
+    {
+        "id": "550e8400-e29b-41d4-a716-446655440001",
+        "timestamp": "2025-12-28T12:00:05Z",
+        "level": "error",
+        "message": "Database connection failed",
+        "source": "ci",
+        "traceId": "trace_abc123"
+    },
+    {
+        "id": "550e8400-e29b-41d4-a716-446655440002",
+        "timestamp": "2025-12-28T12:00:10Z",
+        "level": "warn",
+        "message": "High memory usage detected",
+        "source": "terminal",
+        "hostId": "server-01"
+    }
+]

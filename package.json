@@ -6,7 +6,8 @@
         "packages/*"
     ],
     "scripts": {
-        "dev": "npm run dev --workspaces"
+        "dev": "npm run dev --workspaces",
+        "dev:api": "npm run dev -w packages/api"
     },
     "dependencies": {
         "mongoose": "^8.20.4"

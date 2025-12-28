@@ -22,6 +22,24 @@ const LogEventSchema = z.object({
 // Batch Schema
 const BatchSchema = z.array(LogEventSchema);
 
+// Search Schema
+const SearchQuerySchema = z.object({
+    q: z.string().optional(),
+    level: z.enum(['debug', 'info', 'warn', 'error']).optional(),
+    source: z.enum(['terminal', 'github', 'gitlab', 'ci']).optional(),
+    startDate: z.string().datetime().optional(),
+    endDate: z.string().datetime().optional(),
+    page: z.string().regex(/^\d+$/).transform(Number).optional(),
+    limit: z.string().regex(/^\d+$/).transform(Number).optional(),
+});
+
+// GET /logs/search
+router.get(
+    '/search',
+    validate(SearchQuerySchema, 'query'),
+    LogsController.search
+);
+
 // POST /logs/batch
 router.post(
     '/batch',
