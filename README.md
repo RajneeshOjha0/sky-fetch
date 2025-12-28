@@ -26,8 +26,13 @@ This is a monorepo managed by npm workspaces:
 
 - **Runtime**: Node.js (JavaScript/CommonJS)
 - **API**: Express, Zod, Morgan
-- **Database**: MongoDB (Logs), Meilisearch (Search)
-- **Agent**: Node.js CLI
+- **Database**: MongoDB (Logs), MongoDB Atlas Search (Search)
+- **Agent**: Node.js CLI (Commander, Chokidar)
+
+## Current Status
+- **API**: Ingest & Search endpoints active.
+- **CLI**: Captures shell history, buffers logs, and syncs to API.
+- **Search**: Full-text search via Atlas Search.
 
 ## License
 

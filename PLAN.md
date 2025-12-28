@@ -28,30 +28,30 @@
   - [x] Implement `$search` aggregation pipeline
   - [x] Create `GET /logs/search` endpoint
 
-- [ ] **Day 6: Reliability & Error Handling**
-  - [ ] Global error handler
-  - [ ] Graceful shutdown
-  - [ ] Input sanitization
+- [x] **Day 6: Reliability & Error Handling**
+  - [x] Global error handler
+  - [x] Graceful shutdown
+  - [x] Input sanitization
 
-- [ ] **Day 7: End-to-End Testing**
-  - [ ] Script to send fake logs
-  - [ ] Verify storage in Mongo
-  - [ ] Verify search in Meilisearch
+- [x] **Day 7: End-to-End Testing**
+  - [x] Script to send fake logs
+  - [x] Verify storage in Mongo
+  - [x] Verify search in Meilisearch
 
 ## Phase 2: The CLI Agent
 **Goal:** A robust CLI tool to capture and ship terminal logs.
 
-- [ ] **Day 8: CLI Skeleton**
-  - [ ] Setup Commander/Yargs
-  - [ ] Config management (`~/.skyfetch/config.json`)
+- [x] **Day 8: CLI Skeleton**
+  - [x] Setup Commander/Yargs
+  - [x] Config management (`~/.skyfetch/config.json`)
 
-- [ ] **Day 9: Shell History Hooks**
-  - [ ] Read `.bash_history` / `.zsh_history`
-  - [ ] File watcher implementation
+- [x] **Day 9: Shell History Hooks**
+  - [x] Read `.bash_history` / `.zsh_history`
+  - [x] File watcher implementation
 
-- [ ] **Day 10: Buffering & Batching**
-  - [ ] Local buffer file (append-only)
-  - [ ] Flush logic (every 10s or 100 logs)
+- [x] **Day 10: Buffering & Batching**
+  - [x] Local buffer file (append-only)
+  - [x] Flush logic (every 10s or 100 logs)
 
 - [ ] **Day 11: Authentication**
   - [ ] API Key handshake

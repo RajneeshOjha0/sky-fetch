@@ -40,9 +40,14 @@ router.get(
     LogsController.search
 );
 
+const auth = require('../middlewares/auth');
+
+// ...
+
 // POST /logs/batch
 router.post(
     '/batch',
+    auth,
     validate(BatchSchema),
     LogsController.ingestBatch
 );
