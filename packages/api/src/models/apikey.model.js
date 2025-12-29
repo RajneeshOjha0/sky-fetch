@@ -13,6 +13,12 @@ const apiKeySchema = new mongoose.Schema({
         required: true,
         default: 'admin'
     },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true, // Making this required now for isolation
+        index: true
+    },
     isActive: {
         type: Boolean,
         default: true

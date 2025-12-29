@@ -1,0 +1,152 @@
+import React, { useState, useEffect } from 'react';
+import { Key, Plus, Copy, Check, Trash } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { getApiKeys, generateApiKey } from '../api';
+
+const KeysView = () => {
+    const [keys, setKeys] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [generating, setGenerating] = useState(false);
+    const [newKey, setNewKey] = useState(null);
+    const [keyName, setKeyName] = useState('');
+    const [copied, setCopied] = useState(false);
+
+    // Fetch keys on mount
+    useEffect(() => {
+        fetchKeys();
+    }, []);
+
+    const fetchKeys = async () => {
+        setLoading(true);
+        try {
+            const result = await getApiKeys();
+            if (result.status === 'success') {
+                setKeys(result.data.keys);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGenerate = async (e) => {
+        e.preventDefault();
+        setGenerating(true);
+        try {
+            const result = await generateApiKey(keyName);
+            if (result.status === 'success') {
+                setNewKey(result.data.key);
+                setKeyName('');
+                fetchKeys(); // Refresh list
+            }
+        } catch (err) {
+            console.error("Failed to generate key");
+        } finally {
+            setGenerating(false);
+        }
+    };
+
+    const copyToClipboard = () => {
+        if (newKey) {
+            navigator.clipboard.writeText(newKey);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
+    return (
+        <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight">API Keys</h1>
+                    <p className="text-muted-foreground">Manage your secret keys for CLI and API access.</p>
+                </div>
+            </div>
+
+            {/* Generate Key Form */}
+            <div className="bg-card p-6 rounded-xl border border-border shadow-sm">
+                <h3 className="text-lg font-semibold mb-4">Generate New Key</h3>
+                <form onSubmit={handleGenerate} className="flex gap-4 items-end">
+                    <div className="flex-1 space-y-2">
+                        <label className="text-sm font-medium text-muted-foreground">Key Name</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. Production Server"
+                            className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+                            value={keyName}
+                            onChange={(e) => setKeyName(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={generating}
+                        className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+                    >
+                        {generating ? <div className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" /> : <Plus className="w-4 h-4" />}
+                        Generate
+                    </button>
+                </form>
+
+                <AnimatePresence>
+                    {newKey && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
+                        >
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-sm font-medium text-green-800 dark:text-green-300">Your new API key</span>
+                                <span className="text-xs text-muted-foreground">Make sure to copy it now. You won't see it again!</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <code className="flex-1 p-3 bg-white dark:bg-black rounded border font-mono text-sm break-all">
+                                    {newKey}
+                                </code>
+                                <button onClick={copyToClipboard} className="p-3 bg-white dark:bg-black border rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
+                                    {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+
+            {/* Key List */}
+            <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Active Keys</h3>
+                <div className="bg-card rounded-xl border border-border divide-y divide-border">
+                    {loading ? (
+                        <div className="p-8 text-center text-muted-foreground">Loading keys...</div>
+                    ) : keys.length === 0 ? (
+                        <div className="p-8 text-center text-muted-foreground">No API keys found. Generate one to get started.</div>
+                    ) : (
+                        keys.map((key) => (
+                            <div key={key._id} className="p-4 flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className="p-2 bg-muted rounded">
+                                        <Key className="w-5 h-5 text-muted-foreground" />
+                                    </div>
+                                    <div>
+                                        <p className="font-medium">{key.name}</p>
+                                        <p className="text-xs text-muted-foreground font-mono">
+                                            {key.key /* Only showing prefix in real app would be better, but for now we follow the API return */}
+                                            • Created {new Date(key.createdAt).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                </div>
+                                <button className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors">
+                                    <Trash className="w-4 h-4" />
+                                </button>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default KeysView;

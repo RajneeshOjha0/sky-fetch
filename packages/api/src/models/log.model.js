@@ -42,6 +42,25 @@ const LogSchema = new mongoose.Schema({
     traceId: {
         type: String,
         index: true
+    },
+    // Tenant Fields
+    organization: {
+        type: String,
+        index: true
+    },
+    project: {
+        type: String,
+        index: true
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        index: true
+    },
+    apiKey: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ApiKey',
+        index: true
     }
 }, {
     timestamps: true // Adds createdAt and updatedAt

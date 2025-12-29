@@ -9,7 +9,7 @@ const auth = catchAsync(async (req, res, next) => {
         return next(new AppError('API Key is missing. Please provide x-api-key header.', 401));
     }
 
-    const keyDoc = await ApiKey.findOne({ key: apiKey, isActive: true });
+    const keyDoc = await ApiKey.findOne({ key: apiKey, isActive: true }).populate('user');
 
     if (!keyDoc) {
         return next(new AppError('Invalid or inactive API Key.', 401));

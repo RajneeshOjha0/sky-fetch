@@ -37,6 +37,8 @@ class SearchService {
         const matchStage = {};
         if (filters.level) matchStage.level = filters.level;
         if (filters.source) matchStage.source = filters.source;
+        if (filters.organization) matchStage.organization = filters.organization;
+        if (filters.project) matchStage.project = filters.project;
 
         // Date range filter
         if (filters.startDate || filters.endDate) {

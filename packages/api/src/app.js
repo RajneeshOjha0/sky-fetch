@@ -16,9 +16,12 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+const authRoutes = require('./routes/auth.routes');
+
 // Routes
 app.use('/health', healthRoutes);
 app.use('/logs', logsRoutes);
+app.use('/auth', authRoutes);
 
 // Handle Unhandled Routes
 app.all('*', (req, res, next) => {
