@@ -37,14 +37,14 @@ program
     .command('start')
     .description('Start the log watcher agent')
     .action(async () => {
-        console.log(chalk.yellow('Starting SkyFetch Agent...'));
+        console.log(chalk.cyan('Initializing SkyFetch Agent...'));
 
         const shell = detectShell();
-        console.log(chalk.dim(`Detected Shell: ${shell}`));
+        console.log(chalk.dim(`Detected Shell Environment: ${shell}`));
 
         const historyPath = getHistoryPath();
         if (!historyPath) {
-            console.error(chalk.red('Could not locate shell history file.'));
+            console.error(chalk.red('Error: Unable to locate shell history file.'));
             process.exit(1);
         }
 
@@ -54,14 +54,28 @@ program
         const watcher = new WatcherService(historyPath, bufferService);
         await watcher.start();
 
-        console.log(chalk.dim('Press Ctrl+C to stop'));
+        console.log(chalk.dim('Agent is running. Press Ctrl+C to terminate.'));
 
         // Handle graceful shutdown
         process.on('SIGINT', () => {
-            console.log(chalk.yellow('\nStopping agent...'));
+            console.log(chalk.yellow('\nInitiating graceful shutdown...'));
             bufferService.stop();
             process.exit(0);
         });
     });
+
+// Global Error Handling
+process.on('uncaughtException', (error) => {
+    console.error(chalk.red('Critical Error: Uncaught Exception'));
+    console.error(chalk.red(error.message));
+    console.error(chalk.dim(error.stack));
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error(chalk.red('Critical Error: Unhandled Rejection'));
+    console.error(chalk.red(reason));
+    // Do not exit immediately to allow pending operations to complete if possible
+});
 
 program.parse(process.argv);
