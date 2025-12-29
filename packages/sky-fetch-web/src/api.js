@@ -33,7 +33,7 @@ export const searchLogs = async (query = '', filters = {}) => {
         // Add pagination defaults if needed
         params.append('limit', '100');
 
-        const response = await fetch(`${API_URL}/logs/search?${params.toString()}`, {
+        const response = await fetch(`${API_URL}/api/logs/search?${params.toString()}`, {
             headers: getHeaders()
         });
         return await handleResponse(response);
@@ -70,11 +70,20 @@ export const verifyEmail = async (email, otp) => {
     return await handleResponse(response);
 };
 
-export const generateApiKey = async (name) => {
+export const resendOTP = async (email) => {
+    const response = await fetch(`${API_URL}/auth/resend-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+    });
+    return await handleResponse(response);
+};
+
+export const generateApiKey = async (name, projectId) => {
     const response = await fetch(`${API_URL}/auth/keys`, {
         method: 'POST',
         headers: getHeaders(),
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, projectId }),
     });
     return await handleResponse(response);
 };
@@ -109,6 +118,59 @@ export const updatePassword = async (currentPassword, newPassword) => {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify({ currentPassword, newPassword }),
+    });
+    return await handleResponse(response);
+};
+
+export const forgotPassword = async (email) => {
+    const response = await fetch(`${API_URL}/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+    });
+    return await handleResponse(response);
+};
+
+export const resetPassword = async (email, otp, newPassword) => {
+    const response = await fetch(`${API_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp, newPassword }),
+    });
+    return await handleResponse(response);
+};
+
+// Organization & Project APIs
+export const createOrganization = async (name) => {
+    const response = await fetch(`${API_URL}/api/hierarchy/organizations`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ name }),
+    });
+    return await handleResponse(response);
+};
+
+export const getOrganizations = async () => {
+    const response = await fetch(`${API_URL}/api/hierarchy/organizations`, {
+        method: 'GET',
+        headers: getHeaders(),
+    });
+    return await handleResponse(response);
+};
+
+export const createProject = async (name, organizationId) => {
+    const response = await fetch(`${API_URL}/api/hierarchy/projects`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ name, organizationId }),
+    });
+    return await handleResponse(response);
+};
+
+export const getProjects = async (organizationId) => {
+    const response = await fetch(`${API_URL}/api/hierarchy/projects?organizationId=${organizationId}`, {
+        method: 'GET',
+        headers: getHeaders(),
     });
     return await handleResponse(response);
 };

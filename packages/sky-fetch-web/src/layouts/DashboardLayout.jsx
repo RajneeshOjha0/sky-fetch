@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Terminal, Key, LogOut, Menu, X, Activity, User, ChevronDown } from 'lucide-react';
+import { Terminal, Key, LogOut, Menu, X, Activity, User, ChevronDown, Building } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getUserProfile } from '../api';
 
@@ -110,6 +110,12 @@ const DashboardLayout = () => {
                             active={location.pathname === '/dashboard/keys'}
                         />
                         <SidebarItem
+                            to="/dashboard/organizations"
+                            icon={Building}
+                            label="Organizations"
+                            active={location.pathname === '/dashboard/organizations'}
+                        />
+                        <SidebarItem
                             to="/dashboard/profile"
                             icon={User}
                             label="Profile"
@@ -127,7 +133,7 @@ const DashboardLayout = () => {
 
             {/* Main Content */}
             <main className="flex-1 flex flex-col min-h-screen overflow-hidden w-full">
-                <header className="h-16 border-b border-border bg-card/50 backdrop-blur px-6 flex items-center justify-between sticky top-0 z-10">
+                <header className="h-16 border-b border-border bg-card/50 backdrop-blur px-6 flex items-center justify-between sticky top-0 z-40">
                     <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-muted rounded-lg md:block hidden">
                         <Menu className="w-5 h-5" />
                     </button>

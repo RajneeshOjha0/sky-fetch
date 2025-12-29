@@ -76,26 +76,46 @@
   - [x] React + Vite + Tailwind (in `packages/sky-fetch-web`)
   - [x] API Client setup
 
-- [ ] **Day 16: Search Interface**
-  - [ ] Search bar component
-  - [ ] Results list view
+- [x] **Day 16: Search Interface**
+  - [x] Search bar component
+  - [x] Results list view
 
 - [ ] **Day 17: Log Stream**
   - [ ] Live tail view
   - [ ] Auto-refresh logic
 
-- [ ] **Day 18: Filtering**
-  - [ ] Filter by source/level/date
-  - [ ] Faceted search
+- [x] **Day 18: Filtering**
+  - [x] Filter by source/level/date
+  - [x] Faceted search (Organization/Project filters)
 
 - [ ] **Day 19: Log Details**
   - [ ] Expanded view for JSON metadata
   - [ ] Context view (logs around time)
 
-- [ ] **Day 20: UI Polish**
-  - [ ] Dark mode
-  - [ ] Keyboard shortcuts
+- [x] **Day 20: UI Polish**
+  - [x] Dark mode
+  - [x] Global Theme (Zinc/Slate)
+  - [x] Responsive Sidebar/Header
 
 - [ ] **Day 21: Launch Prep**
   - [ ] Docker Compose for full stack
   - [ ] Documentation
+
+## Phase 4: Enterprise Features (Implemented)
+**Goal:** Multi-tenancy, Security, and Hierarchy.
+
+- [x] **Authentication & Security**
+  - [x] User Registration/Login (JWT)
+  - [x] Email Verification (OTP)
+  - [x] Forgot Password Flow
+  - [x] Tenant Isolation
+
+- [x] **Organization & Project Hierarchy**
+  - [x] Organization Models & Management
+  - [x] Project Scoping
+  - [x] Scoped API Keys (linked to Projects)
+
+- [x] **User Management**
+  - [x] Profile Page
+  - [x] Update User Details
+

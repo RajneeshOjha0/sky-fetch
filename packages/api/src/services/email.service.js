@@ -2,16 +2,29 @@ const nodemailer = require('nodemailer');
 
 class EmailService {
     constructor() {
-        // Create transporter (using Ethereal for dev if no env vars)
-        // In production, these should be securely injected
-        this.transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST || 'smtp.ethereal.email',
-            port: process.env.SMTP_PORT || 587,
-            auth: {
-                user: process.env.SMTP_USER || 'ethereal_user',
-                pass: process.env.SMTP_PASS || 'ethereal_pass'
-            }
-        });
+        // Use Google SMTP if SMTP_DETAILS is present
+        console.log(process.env.SMTP_DETAILS, "details");
+        console.log(process.env.SMTP_USER, "user");
+        if (process.env.SMTP_DETAILS) {
+            this.transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.SMTP_USER, // Ensure this is set in your .env
+                    pass: process.env.SMTP_DETAILS
+                }
+            });
+
+        } else {
+            // Fallback to Ethereal for development
+            this.transporter = nodemailer.createTransport({
+                host: process.env.SMTP_HOST || 'smtp.ethereal.email',
+                port: process.env.SMTP_PORT || 587,
+                auth: {
+                    user: process.env.SMTP_USER || 'ethereal_user',
+                    pass: process.env.SMTP_PASS || 'ethereal_pass'
+                }
+            });
+        }
     }
 
     async sendEmail(to, subject, text, html) {
@@ -42,6 +55,21 @@ class EmailService {
                 <h2>Welcome to SkyFetch!</h2>
                 <p>Please use the following code to verify your email address:</p>
                 <h1 style="color: #4CAF50; letter-spacing: 5px;">${otp}</h1>
+                <p>This code expires in 10 minutes.</p>
+                <p>If you didn't request this, please ignore this email.</p>
+            </div>
+        `;
+        await this.sendEmail(to, subject, text, html);
+    }
+
+    async sendPasswordReset(to, otp) {
+        const subject = 'Reset Your Password - SkyFetch';
+        const text = `Your password reset code is: ${otp}. It expires in 10 minutes.`;
+        const html = `
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
+                <h2>Reset Your Password</h2>
+                <p>You requested a password reset. Use the code below:</p>
+                <h1 style="color: #FF5722; letter-spacing: 5px;">${otp}</h1>
                 <p>This code expires in 10 minutes.</p>
                 <p>If you didn't request this, please ignore this email.</p>
             </div>

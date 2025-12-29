@@ -15,11 +15,13 @@ class ApiService {
             timeout: 10000, // Increased timeout for reliability
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': apiKey
+                // 'x-api-key': apiKey
+                'x-api-key': "sk_81118a6a9571161be02ef119fa02d8b5c7ca95a2a6a88b35"
             }
         });
 
         // Configure exponential backoff retry strategy
+
         axiosRetry(this.client, {
             retries: 3,
             retryDelay: axiosRetry.exponentialDelay,
@@ -36,7 +38,7 @@ class ApiService {
      * @returns {string} The base URL.
      */
     getBaseUrl() {
-        return config.get('apiUrl') || 'http://localhost:3000';
+        return config.get('apiUrl') || 'http://localhost:3000/api';
     }
 
     /**
@@ -48,7 +50,9 @@ class ApiService {
     async sendBatch(logs) {
         try {
             const url = `${this.getBaseUrl()}/logs/batch`;
+            console.log(this.client, "erroe in api")
             const response = await this.client.post(url, logs);
+            console.log(response, "response");
             return response.data;
         } catch (error) {
             if (error.code === 'ECONNREFUSED') {

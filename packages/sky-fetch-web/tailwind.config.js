@@ -25,8 +25,12 @@ export default {
                 "destructive-foreground": "hsl(var(--destructive-foreground))",
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
-                ring: "hsl(var(--ring))",
-                radius: "hsl(var(--radius))"
+                ring: "hsl(var(--ring))"
+            },
+            borderRadius: {
+                lg: "var(--radius)",
+                md: "calc(var(--radius) - 2px)",
+                sm: "calc(var(--radius) - 4px)"
             }
         },
     },

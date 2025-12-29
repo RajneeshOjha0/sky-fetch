@@ -2,22 +2,26 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 
 const apiKeySchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
     key: {
         type: String,
         required: true,
         unique: true,
         index: true
     },
-    owner: {
-        type: String,
-        required: true,
-        default: 'admin'
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project',
+        required: true
     },
-    user: {
+    createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true, // Making this required now for isolation
-        index: true
+        required: true
     },
     isActive: {
         type: Boolean,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Mail, ArrowRight, Check } from 'lucide-react';
-import { verifyEmail } from '../api';
+import { verifyEmail, resendOTP } from '../api';
 import { motion } from 'framer-motion';
 
 const VerifyEmail = () => {
@@ -38,6 +38,22 @@ const VerifyEmail = () => {
             }
         } catch (err) {
             setError(err.message || "Invalid Code");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleResend = async () => {
+        if (!email) return;
+        setLoading(true);
+        setError('');
+        try {
+            await resendOTP(email);
+            // Show temporary informative message
+            setError('Code resent! Check your inbox.');
+            setTimeout(() => setError(''), 3000);
+        } catch (err) {
+            setError(err.message || 'Failed to resend code');
         } finally {
             setLoading(false);
         }
@@ -95,12 +111,12 @@ const VerifyEmail = () => {
                         </div>
 
                         {error && (
-                            <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg text-center">
+                            <div className={`p-3 text-sm rounded-lg text-center ${error.includes('resent') ? 'bg-blue-500/10 text-blue-500' : 'bg-destructive/10 text-destructive'}`}>
                                 {error}
                             </div>
                         )}
 
-                        {success && (
+                        {success && !error && (
                             <div className="p-3 bg-green-500/10 text-green-500 text-sm rounded-lg text-center flex items-center justify-center gap-2">
                                 <Check className="w-4 h-4" /> Verified! Redirecting...
                             </div>
@@ -111,7 +127,7 @@ const VerifyEmail = () => {
                             disabled={loading || success}
                             className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
                         >
-                            {loading ? (
+                            {loading && !error.includes('resent') ? (
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                             ) : (
                                 <>
@@ -123,7 +139,14 @@ const VerifyEmail = () => {
 
                     <div className="mt-6 text-center text-sm">
                         <span className="text-muted-foreground">Didn't receive the code? </span>
-                        <button className="text-primary hover:underline font-medium">Resend</button>
+                        <button
+                            type="button"
+                            onClick={handleResend}
+                            disabled={loading || success}
+                            className="text-primary hover:underline font-medium disabled:opacity-50"
+                        >
+                            Resend
+                        </button>
                     </div>
                 </div>
             </motion.div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Mail, Lock, Building, Briefcase, Save, AlertCircle, CheckCircle, Edit2 } from 'lucide-react';
+import { User, Mail, Lock, Building, Briefcase, Save, AlertCircle, CheckCircle, Edit2, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getUserProfile, updateUserProfile, updatePassword } from '../api';
 
@@ -21,6 +21,7 @@ const Profile = () => {
     });
     const [emailForm, setEmailForm] = useState({ email: '' });
     const [passwordForm, setPasswordForm] = useState({ current: '', new: '', confirm: '' });
+    const [showPassword, setShowPassword] = useState(false);
 
     const [loading, setLoading] = useState({ general: false, email: false, password: false, initial: true });
     const [status, setStatus] = useState({ type: '', message: '' });
@@ -281,17 +282,26 @@ const Profile = () => {
                     <form onSubmit={handleUpdatePassword} className="space-y-4">
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Current Password</label>
-                            <input
-                                type="password"
-                                value={passwordForm.current}
-                                onChange={e => setPasswordForm({ ...passwordForm, current: e.target.value })}
-                                className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"
-                            />
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    value={passwordForm.current}
+                                    onChange={e => setPasswordForm({ ...passwordForm, current: e.target.value })}
+                                    className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all pr-12"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                >
+                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                            </div>
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-medium">New Password</label>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 value={passwordForm.new}
                                 onChange={e => setPasswordForm({ ...passwordForm, new: e.target.value })}
                                 className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"
@@ -300,7 +310,7 @@ const Profile = () => {
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Confirm New Password</label>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 value={passwordForm.confirm}
                                 onChange={e => setPasswordForm({ ...passwordForm, confirm: e.target.value })}
                                 className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all"

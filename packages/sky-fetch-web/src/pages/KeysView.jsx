@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Key, Plus, Copy, Check, Trash } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getApiKeys, generateApiKey } from '../api';
+import { getApiKeys, generateApiKey, getOrganizations, getProjects } from '../api';
 
 const KeysView = () => {
     const [keys, setKeys] = useState([]);
@@ -9,6 +9,10 @@ const KeysView = () => {
     const [generating, setGenerating] = useState(false);
     const [newKey, setNewKey] = useState(null);
     const [keyName, setKeyName] = useState('');
+    const [organizations, setOrganizations] = useState([]);
+    const [projects, setProjects] = useState({});
+    const [selectedOrg, setSelectedOrg] = useState('');
+    const [selectedProject, setSelectedProject] = useState('');
     const [copied, setCopied] = useState(false);
 
     // Fetch keys on mount
@@ -19,9 +23,26 @@ const KeysView = () => {
     const fetchKeys = async () => {
         setLoading(true);
         try {
-            const result = await getApiKeys();
-            if (result.status === 'success') {
-                setKeys(result.data.keys);
+            const [keysRes, orgRes] = await Promise.all([
+                getApiKeys(),
+                getOrganizations()
+            ]);
+
+            if (keysRes.status === 'success') {
+                setKeys(keysRes.data.keys);
+            }
+
+            if (orgRes.status === 'success') {
+                setOrganizations(orgRes.data.organizations);
+                // Pre-load projects
+                const projectData = {};
+                for (const org of orgRes.data.organizations) {
+                    const projRes = await getProjects(org._id);
+                    if (projRes.status === 'success') {
+                        projectData[org._id] = projRes.data.projects;
+                    }
+                }
+                setProjects(projectData);
             }
         } catch (err) {
             console.error(err);
@@ -34,7 +55,7 @@ const KeysView = () => {
         e.preventDefault();
         setGenerating(true);
         try {
-            const result = await generateApiKey(keyName);
+            const result = await generateApiKey(keyName, selectedProject);
             if (result.status === 'success') {
                 setNewKey(result.data.key);
                 setKeyName('');
@@ -67,26 +88,63 @@ const KeysView = () => {
             {/* Generate Key Form */}
             <div className="bg-card p-6 rounded-xl border border-border shadow-sm">
                 <h3 className="text-lg font-semibold mb-4">Generate New Key</h3>
-                <form onSubmit={handleGenerate} className="flex gap-4 items-end">
-                    <div className="flex-1 space-y-2">
-                        <label className="text-sm font-medium text-muted-foreground">Key Name</label>
-                        <input
-                            type="text"
-                            placeholder="e.g. Production Server"
-                            className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none"
-                            value={keyName}
-                            onChange={(e) => setKeyName(e.target.value)}
-                            required
-                        />
+                <form onSubmit={handleGenerate} className="flex flex-col gap-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-muted-foreground">Organization</label>
+                            <select
+                                className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+                                value={selectedOrg}
+                                onChange={e => {
+                                    setSelectedOrg(e.target.value);
+                                    setSelectedProject('');
+                                }}
+                                required
+                            >
+                                <option value="">Select Organization</option>
+                                {organizations.map(org => (
+                                    <option key={org._id} value={org._id}>{org.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-muted-foreground">Project</label>
+                            <select
+                                className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+                                value={selectedProject}
+                                onChange={e => setSelectedProject(e.target.value)}
+                                disabled={!selectedOrg}
+                                required
+                            >
+                                <option value="">Select Project</option>
+                                {projects[selectedOrg]?.map(proj => (
+                                    <option key={proj._id} value={proj._id}>{proj.name}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
-                    <button
-                        type="submit"
-                        disabled={generating}
-                        className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
-                    >
-                        {generating ? <div className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" /> : <Plus className="w-4 h-4" />}
-                        Generate
-                    </button>
+
+                    <div className="flex gap-4 items-end">
+                        <div className="flex-1 space-y-2">
+                            <label className="text-sm font-medium text-muted-foreground">Key Name</label>
+                            <input
+                                type="text"
+                                placeholder="e.g. Production Server"
+                                className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+                                value={keyName}
+                                onChange={(e) => setKeyName(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            disabled={generating || !selectedProject}
+                            className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+                        >
+                            {generating ? <div className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" /> : <Plus className="w-4 h-4" />}
+                            Generate
+                        </button>
+                    </div>
                 </form>
 
                 <AnimatePresence>
@@ -102,7 +160,7 @@ const KeysView = () => {
                                 <span className="text-xs text-muted-foreground">Make sure to copy it now. You won't see it again!</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <code className="flex-1 p-3 bg-white dark:bg-black rounded border font-mono text-sm break-all">
+                                <code className="flex-1 p-3 bg-white dark:bg-black text-black dark:text-white rounded border border-border font-mono text-sm break-all">
                                     {newKey}
                                 </code>
                                 <button onClick={copyToClipboard} className="p-3 bg-white dark:bg-black border rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
@@ -132,7 +190,7 @@ const KeysView = () => {
                                     <div>
                                         <p className="font-medium">{key.name}</p>
                                         <p className="text-xs text-muted-foreground font-mono">
-                                            {key.key /* Only showing prefix in real app would be better, but for now we follow the API return */}
+                                            {key.key}
                                             • Created {new Date(key.createdAt).toLocaleDateString()}
                                         </p>
                                     </div>
