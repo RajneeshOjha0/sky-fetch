@@ -6,10 +6,14 @@
         "packages/*"
     ],
     "scripts": {
-        "dev": "npm run dev --workspaces",
-        "dev:api": "npm run dev -w packages/api"
+        "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+        "dev:api": "npm run dev -w packages/api",
+        "dev:web": "npm run dev -w packages/sky-fetch-web"
     },
     "dependencies": {
         "mongoose": "^8.20.4"
+    },
+    "devDependencies": {
+        "concurrently": "^9.2.1"
     }
 }

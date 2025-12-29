@@ -53,28 +53,28 @@
   - [x] Local buffer file (append-only)
   - [x] Flush logic (every 10s or 100 logs)
 
-- [ ] **Day 11: Authentication**
-  - [ ] API Key handshake
-  - [ ] Local credential storage
+- [x] **Day 11: Authentication**
+  - [x] API Key handshake
+  - [x] Local credential storage
 
-- [ ] **Day 12: Resilience**
-  - [ ] Retry logic for failed uploads
-  - [ ] Offline mode handling
+- [x] **Day 12: Resilience**
+  - [x] Retry logic for failed uploads
+  - [x] Offline mode handling
 
-- [ ] **Day 13: Optimization**
-  - [ ] Resource usage audit
-  - [ ] Startup time optimization
+- [x] **Day 13: Optimization**
+  - [x] Resource usage audit
+  - [x] Startup time optimization
 
-- [ ] **Day 14: CLI Polish**
-  - [ ] Installation script
-  - [ ] Self-update mechanism
+- [x] **Day 14: CLI Polish**
+  - [x] Installation script
+  - [x] Self-update mechanism
 
 ## Phase 3: The Dashboard (Frontend)
 **Goal:** A React interface to visualize and search logs.
 
-- [ ] **Day 15: Frontend Setup**
-  - [ ] React + Vite + Tailwind
-  - [ ] API Client setup
+- [x] **Day 15: Frontend Setup**
+  - [x] React + Vite + Tailwind (in `packages/sky-fetch-web`)
+  - [x] API Client setup
 
 - [ ] **Day 16: Search Interface**
   - [ ] Search bar component
