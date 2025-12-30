@@ -30,9 +30,9 @@ class BufferService {
     /**
      * Stops the auto-flush timer and flushes any remaining logs.
      */
-    stop() {
+    async stop() {
         if (this.timer) clearInterval(this.timer);
-        this.flush();
+        await this.flush();
     }
 
     /**

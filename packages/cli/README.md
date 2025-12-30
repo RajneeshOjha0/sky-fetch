@@ -68,6 +68,34 @@ skyfetch start
 
 This will automatically detect your shell (`bash`, `zsh`, `fish`), find the history file, and start streaming new commands to SkyFetch.
 
+#### Running Commands (Capture Output)
+
+You can run any command and capture its output (stdout/stderr) directly to SkyFetch:
+
+```bash
+skyfetch run "npm run dev"
+```
+
+This will run the command in your terminal as usual, but also stream the logs to the API.
+
+**Filtering Logs:**
+
+To avoid capturing noisy logs (like debug info or build tools), you can use the `--exclude` flag with a regex pattern:
+
+```bash
+skyfetch run "npm run dev" --exclude "nodemon|vite|debug"
+```
+
+**Persistent Filtering:**
+
+To set a global exclusion pattern for all commands:
+
+```bash
+skyfetch config set exclude "nodemon|vite|debug"
+```
+
+Now you can simply run `skyfetch run "npm run dev"` and the filter will apply automatically.
+
 #### Unlinking (Cleanup)
 
 To remove the global link:

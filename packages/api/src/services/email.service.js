@@ -93,6 +93,24 @@ class EmailService {
         `;
         await this.sendEmail(to, subject, text, html);
     }
+    async sendResourceAlert(to, resource, value, threshold) {
+        const subject = `CRITICAL: High ${resource} Usage Alert - SkyFetch`;
+        const text = `Your system's ${resource} usage has exceeded the threshold. Current: ${value}%. Threshold: ${threshold}%.`;
+        const html = `
+            <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #d32f2f; background-color: #ffebee;">
+                <h2 style="color: #c62828;">High Resource Usage Detected</h2>
+                <p>Your system is experiencing high load.</p>
+                <ul>
+                    <li><strong>Resource:</strong> ${resource}</li>
+                    <li><strong>Current Usage:</strong> <span style="font-weight:bold; color: #d32f2f;">${value}%</span></li>
+                    <li><strong>Threshold:</strong> ${threshold}%</li>
+                    <li><strong>Time:</strong> ${new Date().toLocaleString()}</li>
+                </ul>
+                <p>Please check your system immediately.</p>
+            </div>
+        `;
+        await this.sendEmail(to, subject, text, html);
+    }
 }
 
 module.exports = new EmailService();

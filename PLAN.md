@@ -101,6 +101,11 @@
   - [ ] Docker Compose for full stack
   - [ ] Documentation
 
+- [x] **System Monitoring**
+  - [x] Backend Metrics Endpoint (CPU, Mem, DB)
+  - [x] Frontend Monitoring Dashboard
+
+
 ## Phase 4: Enterprise Features (Implemented)
 **Goal:** Multi-tenancy, Security, and Hierarchy.
 

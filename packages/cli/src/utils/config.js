@@ -8,6 +8,10 @@ const schema = {
     apiKey: {
         type: 'string',
         default: ''
+    },
+    exclude: {
+        type: 'string',
+        default: ''
     }
 };
 

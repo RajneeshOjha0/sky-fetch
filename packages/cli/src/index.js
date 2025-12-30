@@ -2,6 +2,7 @@
 const { Command } = require('commander');
 const chalk = require('chalk');
 const configCommands = require('./commands/config');
+const runCommand = require('./commands/run');
 const packageJson = require('../package.json');
 const { detectShell, getHistoryPath } = require('./utils/shell');
 const WatcherService = require('./services/watcher.service');
@@ -32,6 +33,13 @@ config
     .description('List all configuration values')
     .action(configCommands.list);
 
+// Run Command
+program
+    .command('run [command...]')
+    .description('Run a command and capture its output')
+    .option('-x, --exclude <pattern>', 'Regex pattern to exclude logs')
+    .action(runCommand);
+
 // Start Command
 program
     .command('start')
@@ -51,6 +59,10 @@ program
         const bufferService = new BufferService();
         bufferService.start();
 
+        const MonitoringService = require('./services/monitoring.service');
+        const monitoringService = new MonitoringService();
+        monitoringService.start();
+
         const watcher = new WatcherService(historyPath, bufferService);
         await watcher.start();
 
@@ -59,6 +71,7 @@ program
         // Handle graceful shutdown
         process.on('SIGINT', () => {
             console.log(chalk.yellow('\nInitiating graceful shutdown...'));
+            monitoringService.stop();
             bufferService.stop();
             process.exit(0);
         });

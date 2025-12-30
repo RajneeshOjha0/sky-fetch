@@ -40,9 +40,19 @@ class LogsController {
      * Handle batch ingest request
      */
     static ingestBatch = catchAsync(async (req, res, next) => {
+        console.log('--- Ingest Batch Request ---');
+        // console.log('Headers:', req.headers);
+        // console.log('API Key Object:', req.apiKey);
+
         const logs = req.body;
         const apiKey = req.apiKey; // Attached by auth middleware
-        const user = apiKey.user;  // Populated in auth middleware
+
+        // DEBUG: Check if user exists
+        if (!apiKey.createdBy) {
+            console.error('CRITICAL: apiKey.createdBy is undefined! Check auth middleware populate.');
+        }
+
+        const user = apiKey.createdBy || { _id: 'anonymous', organization: 'default', project: 'default' };
 
         // Inject tenant info into each log entry
         const enrichedLogs = logs.map(log => ({
@@ -53,12 +63,70 @@ class LogsController {
             project: user.project
         }));
 
+        console.log(`Processing ${enrichedLogs.length} logs...`);
+
         const result = await LogsService.processBatch(enrichedLogs);
+
+        console.log('Batch processed successfully');
 
         res.status(202).json({
             status: 'accepted',
             ...result
         });
+    });
+    /**
+     * Handle metrics ingest request
+     */
+    static ingestMetrics = catchAsync(async (req, res, next) => {
+        const metrics = req.body;
+        const apiKey = req.apiKey;
+        const Project = require('../models/project.model');
+        const EmailService = require('../services/email.service');
+        const mongoose = require('mongoose');
+
+        // Update Project
+        const project = await Project.findById(apiKey.project);
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        project.metrics = {
+            ...metrics,
+            lastUpdated: new Date()
+        };
+
+        // Check Thresholds & Alert
+        const CPU_THRESHOLD = 90;
+        const RAM_THRESHOLD = 90;
+        const ALERT_COOLDOWN = 1000 * 60 * 60; // 1 hour
+
+        const now = new Date();
+        const lastAlert = project.lastAlertSentAt ? new Date(project.lastAlertSentAt) : new Date(0);
+
+        if (now - lastAlert > ALERT_COOLDOWN) {
+            let alertSent = false;
+            // Get user email - apiKey.createdBy is the user
+            const User = require('../models/user.model');
+            const user = await User.findById(apiKey.createdBy);
+
+            if (user) {
+                if (metrics.cpu > CPU_THRESHOLD) {
+                    await EmailService.sendResourceAlert(user.email, 'CPU', metrics.cpu, CPU_THRESHOLD);
+                    alertSent = true;
+                } else if (metrics.memory > RAM_THRESHOLD) {
+                    await EmailService.sendResourceAlert(user.email, 'Memory', metrics.memory, RAM_THRESHOLD);
+                    alertSent = true;
+                }
+            }
+
+            if (alertSent) {
+                project.lastAlertSentAt = now;
+            }
+        }
+
+        await project.save();
+
+        res.status(200).json({ status: 'ok' });
     });
 }
 

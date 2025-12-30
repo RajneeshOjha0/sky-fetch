@@ -15,6 +15,7 @@
         "chokidar": "^4.0.3",
         "commander": "^14.0.2",
         "conf": "9",
+        "cross-spawn": "^7.0.6",
         "inquirer": "^13.1.0",
         "uuid": "8"
     }

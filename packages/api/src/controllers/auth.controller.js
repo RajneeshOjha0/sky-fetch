@@ -148,7 +148,7 @@ exports.login = async (req, res) => {
         const token = signToken(user._id);
 
         // Send login alert (async, don't wait)
-        EmailService.sendLoginAlert(user.email, { ip: req.ip }).catch(console.error);
+        // EmailService.sendLoginAlert(user.email, { ip: req.ip }).catch(console.error);
 
         res.status(200).json({
             status: 'success',

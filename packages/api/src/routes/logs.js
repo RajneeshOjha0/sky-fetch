@@ -55,4 +55,11 @@ router.post(
     LogsController.ingestBatch
 );
 
+// POST /logs/metrics
+router.post(
+    '/metrics',
+    auth,
+    LogsController.ingestMetrics
+);
+
 module.exports = router;

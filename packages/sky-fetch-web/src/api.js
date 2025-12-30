@@ -174,3 +174,10 @@ export const getProjects = async (organizationId) => {
     });
     return await handleResponse(response);
 };
+
+export const getSystemMetrics = async () => {
+    const response = await fetch(`${API_URL}/health/metrics`, {
+        headers: getHeaders(),
+    });
+    return await handleResponse(response);
+};
