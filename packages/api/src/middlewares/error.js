@@ -20,10 +20,7 @@ const handleValidationErrorDB = err => {
 
 const handleZodError = err => {
     const message = 'Validation Error';
-    // We can attach detailed errors to the response object if needed, 
-    // but AppError structure is simple message. 
-    // For Zod, we might want to return the details array.
-    // So we'll handle Zod specifically in the sendError functions or just return 400 here.
+
     return new AppError(message, 400);
 };
 
@@ -49,7 +46,7 @@ const sendErrorProd = (err, res) => {
     else {
         // 1) Log error
         console.error('ERROR ', err);
-
+        console.warn("[ERROR] message", err.message);
         // 2) Send generic message
         res.status(500).json({
             status: 'error',
