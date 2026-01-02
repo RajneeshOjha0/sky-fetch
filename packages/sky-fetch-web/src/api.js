@@ -156,6 +156,7 @@ export const getOrganizations = async () => {
         headers: getHeaders(),
     });
     return await handleResponse(response);
+
 };
 
 export const createProject = async (name, organizationId) => {

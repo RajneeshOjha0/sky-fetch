@@ -1,18 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Search, Filter, Calendar, ListFilter, Building, Briefcase } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getOrganizations, getProjects } from '../api';
 
 const SearchBar = ({ onSearch }) => {
     const [query, setQuery] = useState('');
     const [showFilters, setShowFilters] = useState(false);
+    const [organization, setOrganization] = useState([]);
+    const [project, setProject] = useState([]);
     const [filters, setFilters] = useState({
         level: 'all',
         source: 'all',
         dateFrom: '',
         dateTo: '',
-        organization: '',
-        project: ''
+        organization: 'all',
+        project: '',
+        organizationId: ''
     });
+
+    const filterRef = useRef(null);
+
+    // Close filter dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (filterRef.current && !filterRef.current.contains(event.target)) {
+                setShowFilters(false);
+            }
+        };
+
+        if (showFilters) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showFilters]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -23,8 +46,29 @@ const SearchBar = ({ onSearch }) => {
         setFilters(prev => ({ ...prev, [key]: value }));
     };
 
+    useEffect(() => {
+        console.log("useEffect");
+        const fetchData = async () => {
+            const data = await getOrganizations();
+            setOrganization(data.data.organizations);
+        }
+        fetchData();
+    }, []);
+    useEffect(() => {
+        const fetchProjects = async (organizationId) => {
+            const data = await getProjects(organizationId);
+            console.log(data)
+            setProject(data.data.projects);
+        }
+        if (filters.organizationId) {
+            fetchProjects(filters.organizationId);
+        }
+        // console.log(filters.organizationId, "kamlesh")
+    }, [filters.organization])
+    // console.log(organization)
+    // console.log(project)
     return (
-        <div className="w-full max-w-3xl relative z-20">
+        <div ref={filterRef} className="w-full max-w-3xl relative z-20">
             <form onSubmit={handleSubmit} className="relative flex gap-2">
                 <div className="relative flex-1">
                     <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
@@ -101,17 +145,50 @@ const SearchBar = ({ onSearch }) => {
                             <label className="text-xs font-medium text-muted-foreground flex items-center gap-1">
                                 <Building className="w-3 h-3" /> Organization
                             </label>
-                            <input
-                                type="text"
-                                placeholder="Filter by Org"
+                            <select
                                 value={filters.organization}
-                                onChange={(e) => handleFilterChange('organization', e.target.value)}
+                                onChange={(e) => {
+                                    // console.log("45455656", e.target.name)
+                                    handleFilterChange('organization', e.target.name)
+                                    handleFilterChange('organizationId', e.target.value)
+                                }
+                                }
                                 className="w-full px-3 py-2 bg-background border rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
-                            />
+                            >
+                                <option value="all" name="all">All Organizations</option>
+                                {organization?.map((org) => {
+                                    console.log(org._id)
+                                    return (<option key={org._id} value={org._id} name={org.name} >
+                                        {org.name}
+                                    </option>)
+                                })}
+
+                            </select>
                         </div>
 
                         {/* Project */}
                         <div className="space-y-2">
+                            <label className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+                                <Briefcase className="w-3 h-3" /> Project
+                            </label>
+                            <select
+                                value={filters.project}
+                                onChange={(e) => handleFilterChange('project', e.target.value)}
+                                className="w-full px-3 py-2 bg-background border rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
+                            >
+                                <option value="all">All Projects</option>
+                                {project?.map((project) => {
+                                    console.log(project._id)
+                                    return (<option key={project.id} value={project.id}>
+                                        {project.name}
+                                    </option>)
+                                })}
+
+                            </select>
+                        </div>
+
+                        {/* Project */}
+                        {/* <div className="space-y-2">
                             <label className="text-xs font-medium text-muted-foreground flex items-center gap-1">
                                 <Briefcase className="w-3 h-3" /> Project
                             </label>
@@ -122,7 +199,7 @@ const SearchBar = ({ onSearch }) => {
                                 onChange={(e) => handleFilterChange('project', e.target.value)}
                                 className="w-full px-3 py-2 bg-background border rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none"
                             />
-                        </div>
+                        </div> */}
 
                         {/* Date From */}
                         <div className="space-y-2">

@@ -54,7 +54,10 @@ const DashboardLayout = () => {
             }
         };
         loadUser();
+
     }, []);
+
+    // console.log("kamlesh")
 
     const handleLogout = () => {
         localStorage.removeItem('token');
