@@ -28,11 +28,13 @@ This is a monorepo managed by npm workspaces:
 - **API**: Express, Zod, Morgan
 - **Database**: MongoDB (Logs), MongoDB Atlas Search (Search)
 - **Agent**: Node.js CLI (Commander, Chokidar)
+- **Web**: React, Vite, TailwindCSS
 
 ## Current Status
 - **API**: Ingest & Search endpoints active.
 - **CLI**: Captures shell history, buffers logs, and syncs to API.
-- **Search**: Full-text search via Atlas Search.
+- **Search**: Full-text search via Atlas Search using mongodb indexing.
+- **Web**: Dashboard with search bar and filters.
 
 ## License
 
