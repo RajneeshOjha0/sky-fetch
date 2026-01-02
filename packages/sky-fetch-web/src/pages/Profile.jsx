@@ -10,7 +10,7 @@ const Profile = () => {
         email: '',
         organization: '',
         project: '',
-        avatar: 'U'
+        avatar: ''
     });
 
     // Form States
@@ -36,6 +36,7 @@ const Profile = () => {
                     ...userData,
                     avatar: userData.avatar || userData.name.charAt(0).toUpperCase()
                 }));
+                // console.log(user, "User");
             } catch (err) {
                 setStatus({ type: 'error', message: 'Failed to load profile' });
             } finally {
