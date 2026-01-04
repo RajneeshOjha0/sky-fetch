@@ -98,12 +98,12 @@ const MonitoringView = () => {
                     value={metrics.memory.value}
                     status={metrics.memory.status}
                 />
-                <MetricCard
+                {/* <MetricCard
                     icon={Database}
                     label="DB Connections"
                     value={metrics.db.connections}
                     status={metrics.db.status}
-                />
+                /> */}
                 <MetricCard
                     icon={Activity}
                     label="Ingest Rate"
