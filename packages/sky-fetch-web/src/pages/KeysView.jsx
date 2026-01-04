@@ -84,6 +84,43 @@ const KeysView = () => {
         }
     };
 
+    const handleRevealKey = (keyId) => {
+        setSelectedKeyId(keyId);
+        setShowPasswordModal(true);
+        setPassword('');
+        setPasswordError('');
+    };
+
+    const handlePasswordSubmit = async (e) => {
+        e.preventDefault();
+        setPasswordError('');
+        setRevealing(true);
+
+        try {
+            const result = await revealApiKey(selectedKeyId, password);
+            if (result.status === 'success') {
+                // Store the revealed key temporarily
+                setRevealedKeys(prev => ({
+                    ...prev,
+                    [selectedKeyId]: result.data.key
+                }));
+                setShowPasswordModal(false);
+                setPassword('');
+            }
+        } catch (err) {
+            setPasswordError(err.message || 'Incorrect password');
+        } finally {
+            setRevealing(false);
+        }
+    };
+
+    const closePasswordModal = () => {
+        setShowPasswordModal(false);
+        setPassword('');
+        setPasswordError('');
+        setSelectedKeyId(null);
+    };
+
     return (
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
