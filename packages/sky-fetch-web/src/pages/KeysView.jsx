@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Key, Plus, Copy, Check, Trash } from 'lucide-react';
+import { Key, Plus, Copy, Check, Trash, Eye, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getApiKeys, generateApiKey, getOrganizations, getProjects } from '../api';
+import { getApiKeys, generateApiKey, getOrganizations, getProjects, revealApiKey } from '../api';
 
 const KeysView = () => {
     const [keys, setKeys] = useState([]);
@@ -14,6 +14,14 @@ const KeysView = () => {
     const [selectedOrg, setSelectedOrg] = useState('');
     const [selectedProject, setSelectedProject] = useState('');
     const [copied, setCopied] = useState(false);
+
+    // Password modal state
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [selectedKeyId, setSelectedKeyId] = useState(null);
+    const [password, setPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [revealing, setRevealing] = useState(false);
+    const [revealedKeys, setRevealedKeys] = useState({});
 
     // Fetch keys on mount
     useEffect(() => {
