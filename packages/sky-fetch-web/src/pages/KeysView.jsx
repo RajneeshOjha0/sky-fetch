@@ -235,19 +235,102 @@ const KeysView = () => {
                                     <div>
                                         <p className="font-medium">{key.name}</p>
                                         <p className="text-xs text-muted-foreground font-mono">
-                                            {key.key}
+                                            {revealedKeys[key._id] || key.key}
                                             • Created {new Date(key.createdAt).toLocaleDateString()}
                                         </p>
                                     </div>
                                 </div>
-                                <button className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors">
-                                    <Trash className="w-4 h-4" />
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => handleRevealKey(key._id)}
+                                        className="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded transition-colors"
+                                        title="Reveal API key"
+                                    >
+                                        <Eye className="w-4 h-4" />
+                                    </button>
+                                    <button className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors">
+                                        <Trash className="w-4 h-4" />
+                                    </button>
+                                </div>
                             </div>
                         ))
                     )}
                 </div>
             </div>
+
+            {/* Password Modal */}
+            <AnimatePresence>
+                {showPasswordModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+                        onClick={closePasswordModal}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            className="bg-card p-6 rounded-xl border border-border shadow-xl max-w-md w-full mx-4"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-semibold">Verify Password</h3>
+                                <button
+                                    onClick={closePasswordModal}
+                                    className="p-1 hover:bg-muted rounded transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-4">
+                                Enter your password to reveal the full API key.
+                            </p>
+                            <form onSubmit={handlePasswordSubmit} className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium">Password</label>
+                                    <input
+                                        type="password"
+                                        className="w-full px-4 py-2 bg-background border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="Enter your password"
+                                        autoFocus
+                                        required
+                                    />
+                                    {passwordError && (
+                                        <p className="text-sm text-red-500">{passwordError}</p>
+                                    )}
+                                </div>
+                                <div className="flex gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={closePasswordModal}
+                                        className="flex-1 px-4 py-2 bg-muted text-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={revealing}
+                                        className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                                    >
+                                        {revealing ? (
+                                            <>
+                                                <div className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" />
+                                                Verifying...
+                                            </>
+                                        ) : (
+                                            'Reveal Key'
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
