@@ -95,6 +95,15 @@ export const getApiKeys = async () => {
     return await handleResponse(response);
 };
 
+export const revealApiKey = async (keyId, password) => {
+    const response = await fetch(`${API_URL}/auth/keys/${keyId}/reveal`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ password }),
+    });
+    return await handleResponse(response);
+};
+
 export const getUserProfile = async () => {
     const response = await fetch(`${API_URL}/auth/profile`, {
         headers: getHeaders(),

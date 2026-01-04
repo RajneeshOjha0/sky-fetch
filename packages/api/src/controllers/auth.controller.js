@@ -229,12 +229,25 @@ exports.updatePassword = async (req, res) => {
 
 // --- API Keys ---
 
+// Helper function to mask API key
+const maskApiKey = (key) => {
+    if (!key || key.length < 8) return key;
+    const firstFour = key.substring(0, 4);
+    const lastFour = key.substring(key.length - 4);
+    return `${firstFour}${'*'.repeat(12)}${lastFour}`;
+};
+
 exports.getApiKeys = async (req, res) => {
     try {
         const keys = await ApiKey.find({ createdBy: req.user.id }).populate('project', 'name');
+        // Mask the keys before sending
+        const maskedKeys = keys.map(key => ({
+            ...key.toObject(),
+            key: maskApiKey(key.key)
+        }));
         res.status(200).json({
             status: 'success',
-            data: { keys }
+            data: { keys: maskedKeys }
         });
     } catch (error) {
         res.status(400).json({ status: 'error', message: error.message });
@@ -276,6 +289,37 @@ exports.generateApiKey = async (req, res) => {
         res.status(201).json({
             status: 'success',
             data: { key: newKey.key, name: newKey.name, project: project.name }
+        });
+    } catch (error) {
+        res.status(400).json({ status: 'error', message: error.message });
+    }
+};
+
+exports.revealApiKey = async (req, res) => {
+    try {
+        const { password } = req.body;
+        const keyId = req.params.id;
+
+        if (!password) {
+            return res.status(400).json({ status: 'error', message: 'Password is required' });
+        }
+
+        // Verify password
+        const user = await User.findById(req.user.id).select('+password');
+        if (!(await user.matchPassword(password))) {
+            return res.status(401).json({ status: 'error', message: 'Incorrect password' });
+        }
+
+        // Find the API key and verify ownership
+        const apiKey = await ApiKey.findOne({ _id: keyId, createdBy: req.user.id });
+        if (!apiKey) {
+            return res.status(404).json({ status: 'error', message: 'API key not found' });
+        }
+
+        // Return the full key
+        res.status(200).json({
+            status: 'success',
+            data: { key: apiKey.key }
         });
     } catch (error) {
         res.status(400).json({ status: 'error', message: error.message });

@@ -8,6 +8,7 @@ const {
     updatePassword,
     getApiKeys,
     generateApiKey,
+    revealApiKey,
     verifyEmail,
     resendOTP,
     forgotPassword,
@@ -31,5 +32,6 @@ router.put('/password', updatePassword);
 
 router.get('/keys', getApiKeys);
 router.post('/keys', generateApiKey);
+router.post('/keys/:id/reveal', revealApiKey);
 
 module.exports = router;
