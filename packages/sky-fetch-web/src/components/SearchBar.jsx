@@ -57,7 +57,7 @@ const SearchBar = ({ onSearch }) => {
     useEffect(() => {
         const fetchProjects = async (organizationId) => {
             const data = await getProjects(organizationId);
-            console.log(data)
+            // console.log(data)
             setProject(data.data.projects);
         }
         if (filters.organizationId) {
@@ -66,7 +66,7 @@ const SearchBar = ({ onSearch }) => {
         // console.log(filters.organizationId, "kamlesh")
     }, [filters.organization])
     // console.log(organization)
-    console.log(project)
+    // console.log(project)
     return (
         <div ref={filterRef} className="w-full max-w-3xl relative z-20">
             <form onSubmit={handleSubmit} className="relative flex gap-2">
