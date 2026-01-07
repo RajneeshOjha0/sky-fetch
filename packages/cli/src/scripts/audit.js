@@ -48,7 +48,7 @@ const interval = setInterval(() => {
     } catch (e) {
         console.error(e);
     }
-}, 1000);
+}, 2000);
 
 function finishAudit() {
     console.log(chalk.cyan('\n--- Audit Complete ---'));
