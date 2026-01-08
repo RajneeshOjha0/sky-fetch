@@ -111,7 +111,7 @@ const LandingPage = () => {
                             </h1>
                             <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-balance">
                                 SkyFetch aggregates logs, metrics, and traces from all your services into one unified platform.
-                                No proprietary agents. No vendor lock-in. Just instant insights when you need them most.
+                                No proprietary agents. No vendor lock-in. Just instant insights when you need them most out of the box.
                             </p>
 
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
