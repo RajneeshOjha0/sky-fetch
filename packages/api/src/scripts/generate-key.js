@@ -20,7 +20,7 @@ const generateKey = async () => {
         console.log('Use this key in your CLI: skyfetch config set apiKey <key>');
 
     } catch (error) {
-        console.error('Error generating key:', error);
+        console.error('Error generating key:', error).message;
     } finally {
         await mongoose.disconnect();
         process.exit();
