@@ -15,7 +15,7 @@ const LogList = ({ logs = [] }) => {
     if (!logs.length) {
         return (
             <div className="text-center py-12 text-muted-foreground">
-                No logs found. Try searching for something else.
+                No logs found. Try searching for something else or please check your filters.
             </div>
         );
     }
