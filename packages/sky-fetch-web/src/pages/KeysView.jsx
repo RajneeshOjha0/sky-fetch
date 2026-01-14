@@ -126,7 +126,7 @@ const KeysView = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold tracking-tight">API Keys</h1>
-                    <p className="text-muted-foreground">Manage your secret keys for CLI and API access.</p>
+                    <p className="text-muted-foreground">Manage your secret keys for CLI and API access out of the box.</p>
                 </div>
             </div>
 
