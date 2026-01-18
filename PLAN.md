@@ -9,7 +9,7 @@
   - [x] Configure CommonJS structure
 
 - [x] **Day 2: Express API Skeleton**
-  - [x] Setup Express
+  - [x]  Setup Express
   - [x] Configure Middleware (Cors, Helmet, Morgan)
   - [x] Create `/health` endpoint
 
@@ -90,7 +90,7 @@
 
 - [x] **Day 19: Log Details**
   - [x] Expanded view for JSON metadata
-  - [x] Context view (logs around time)
+  - [x] Context view (logs around time) 
 
 - [x] **Day 20: UI Polish**
   - [x] Dark mode
