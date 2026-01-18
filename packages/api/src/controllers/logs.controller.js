@@ -126,7 +126,7 @@ class LogsController {
 
         await project.save();
 
-        res.status(200).json({ status: 'ok' });
+        res.status(200).json({ status: 'ok', message: 'Metrics ingested successfully' });
     });
 
     /**
