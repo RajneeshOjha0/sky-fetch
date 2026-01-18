@@ -191,3 +191,10 @@ export const getSystemMetrics = async () => {
     });
     return await handleResponse(response);
 };
+
+export const getLogContext = async (logId, before = 10, after = 10) => {
+    const response = await fetch(`${API_URL}/api/logs/${logId}/context?before=${before}&after=${after}`, {
+        headers: getHeaders(),
+    });
+    return await handleResponse(response);
+};

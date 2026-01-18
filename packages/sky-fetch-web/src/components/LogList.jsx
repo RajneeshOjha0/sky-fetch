@@ -11,7 +11,7 @@ const SourceIcon = ({ source }) => {
     }
 };
 
-const LogList = ({ logs = [] }) => {
+const LogList = ({ logs = [], onLogClick }) => {
     if (!logs.length) {
         return (
             <div className="text-center py-12 text-muted-foreground">
@@ -23,7 +23,11 @@ const LogList = ({ logs = [] }) => {
     return (
         <div className="w-full max-w-4xl space-y-4">
             {logs.map((log) => (
-                <div key={log.id} className="p-4 bg-card border rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div
+                    key={log.id}
+                    className="p-4 bg-card border rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer hover:border-primary/50"
+                    onClick={() => onLogClick && onLogClick(log)}
+                >
                     <div className="flex items-start justify-between gap-4">
                         <div className="flex items-center gap-3">
                             <span className={clsx(
@@ -46,12 +50,14 @@ const LogList = ({ logs = [] }) => {
                             <span>{log.source}</span>
                         </div>
                     </div>
-                    <div className="mt-2 font-mono text-sm whitespace-pre-wrap">
+                    <div className="mt-2 font-mono text-sm whitespace-pre-wrap line-clamp-3">
                         {log.message}
                     </div>
                     {log.metadata && (
-                        <div className="mt-2 text-xs bg-muted p-2 rounded overflow-x-auto">
-                            <pre>{JSON.stringify(log.metadata, null, 2)}</pre>
+                        <div className="mt-2 text-xs text-muted-foreground">
+                            <span className="bg-muted px-2 py-1 rounded">
+                                + metadata
+                            </span>
                         </div>
                     )}
                 </div>

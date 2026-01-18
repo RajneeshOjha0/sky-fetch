@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Activity } from 'lucide-react';
 import SearchBar from '../components/SearchBar';
 import LogList from '../components/LogList';
+import LogDetailsModal from '../components/LogDetailsModal';
 import { searchLogs } from '../api';
 
 const LogsView = () => {
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [selectedLog, setSelectedLog] = useState(null);
 
     const handleSearch = async (searchParams) => {
         // Handle both initial string call or object from SearchBar
@@ -56,9 +58,16 @@ const LogsView = () => {
                         {error}
                     </div>
                 ) : (
-                    <LogList logs={logs} />
+                    <LogList logs={logs} onLogClick={setSelectedLog} />
                 )}
             </div>
+
+            {selectedLog && (
+                <LogDetailsModal
+                    log={selectedLog}
+                    onClose={() => setSelectedLog(null)}
+                />
+            )}
         </div>
     );
 };

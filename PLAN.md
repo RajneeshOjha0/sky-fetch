@@ -88,9 +88,9 @@
   - [x] Filter by source/level/date
   - [x] Faceted search (Organization/Project filters)
 
-- [ ] **Day 19: Log Details**
-  - [ ] Expanded view for JSON metadata
-  - [ ] Context view (logs around time)
+- [x] **Day 19: Log Details**
+  - [x] Expanded view for JSON metadata
+  - [x] Context view (logs around time)
 
 - [x] **Day 20: UI Polish**
   - [x] Dark mode

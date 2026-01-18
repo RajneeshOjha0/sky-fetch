@@ -128,6 +128,24 @@ class LogsController {
 
         res.status(200).json({ status: 'ok' });
     });
+
+    /**
+     * Get logs around a specific log entry (context view)
+     */
+    static getContext = catchAsync(async (req, res, next) => {
+        const { id } = req.params;
+        const { before = 10, after = 10 } = req.query;
+        const user = req.user;
+
+        const result = await LogsService.getLogContext(
+            id,
+            user.organization,
+            parseInt(before),
+            parseInt(after)
+        );
+
+        res.json(result);
+    });
 }
 
 module.exports = LogsController;

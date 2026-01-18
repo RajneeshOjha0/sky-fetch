@@ -62,4 +62,11 @@ router.post(
     LogsController.ingestMetrics
 );
 
+// GET /logs/:id/context - Get logs around a specific log entry
+router.get(
+    '/:id/context',
+    protect,
+    LogsController.getContext
+);
+
 module.exports = router;
