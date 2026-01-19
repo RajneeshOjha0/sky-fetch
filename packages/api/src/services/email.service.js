@@ -3,8 +3,8 @@ const nodemailer = require('nodemailer');
 class EmailService {
     constructor() {
         // Use Google SMTP if SMTP_DETAILS is present
-        console.log(process.env.SMTP_DETAILS, "details");
-        console.log(process.env.SMTP_USER, "user");
+        // console.log(process.env.SMTP_DETAILS, "details");
+        // console.log(process.env.SMTP_USER, "user");
         if (process.env.SMTP_DETAILS) {
             this.transporter = nodemailer.createTransport({
                 service: 'gmail',
