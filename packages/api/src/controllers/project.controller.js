@@ -58,7 +58,7 @@ exports.createProject = async (req, res) => {
         res.status(400).json({ status: 'error', message: error.message });
     }
 };
-
+//get project by organization id
 exports.getProjects = async (req, res) => {
     try {
         const { organizationId } = req.query;
@@ -81,6 +81,7 @@ exports.getProjects = async (req, res) => {
 
         res.status(200).json({ status: 'success', data: { projects } });
     } catch (error) {
+        console.log('[ERROR] error in fetching projects', error.message);
         res.status(500).json({ status: 'error', message: error.message });
     }
 };
