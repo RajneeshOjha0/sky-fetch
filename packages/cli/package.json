@@ -1,14 +1,48 @@
 {
     "name": "@skyfetch/cli",
-    "version": "0.0.1",
+    "version": "1.0.0",
+    "description": "Command-line interface for SkyFetch - Stream terminal logs and command outputs to your centralized logging platform",
+    "main": "src/index.js",
     "bin": {
         "skyfetch": "./src/index.js"
     },
     "scripts": {
-        "dev": "node src/index.js"
+        "dev": "node src/index.js",
+        "validate": "node validate-publish.js",
+        "prepublishOnly": "npm run validate"
     },
+    "keywords": [
+        "logging",
+        "terminal",
+        "cli",
+        "monitoring",
+        "observability",
+        "shell-history",
+        "command-tracking",
+        "log-aggregation",
+        "devtools",
+        "skyfetch"
+    ],
+    "author": "SkyFetch Team",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/RajneeshOjha0/sky-fetch.git",
+        "directory": "packages/cli"
+    },
+    "bugs": {
+        "url": "https://github.com/RajneeshOjha0/sky-fetch/issues"
+    },
+    "homepage": "https://github.com/RajneeshOjha0/sky-fetch#readme",
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "files": [
+        "src/",
+        "README.md",
+        "LICENSE"
+    ],
     "dependencies": {
-        "@skyfetch/shared": "*",
         "axios": "^1.13.2",
         "axios-retry": "^4.5.0",
         "chalk": "^4.1.2",
