@@ -6,7 +6,7 @@ const EmailService = require('../services/email.service');
 
 const signToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET || 'secret_dev_key', {
-        expiresIn: '30d'
+        expiresIn: '1d'
     });
 };
 
