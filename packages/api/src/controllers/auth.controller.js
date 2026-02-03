@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
 
         // Generate OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const otpExpires = Date.now() + 10 * 60 * 1000; // 10 mins
+        const otpExpires = Date.now() + 5 * 60 * 1000; // 10 mins
 
         const user = await User.create({
             name,
