@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Terminal, Shield, Zap, Search, Globe, Code, ChevronRight, Activity, Database, Cloud, Users, TrendingUp, Clock, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
+import ThemeToggle from '../components/ThemeToggle';
 
 const FeatureCard = ({ icon: Icon, title, description }) => (
     <motion.div
@@ -79,6 +80,7 @@ const LandingPage = () => {
                     </nav>
 
                     <div className="flex items-center gap-4">
+                        <ThemeToggle />
                         <Link to="/login" className="text-sm font-medium hover:text-primary transition-colors">
                             Log in
                         </Link>

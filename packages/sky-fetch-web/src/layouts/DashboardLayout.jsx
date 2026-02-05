@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Terminal, Key, LogOut, Menu, X, Activity, User, ChevronDown, Building } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getUserProfile } from '../api';
+import ThemeToggle from '../components/ThemeToggle';
 
 const SidebarItem = ({ to, icon: Icon, label, active }) => (
     <Link to={to} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${active ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
@@ -144,50 +145,55 @@ const DashboardLayout = () => {
                         {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                     </button>
 
-                    {/* User Dropdown */}
-                    <div className="relative">
-                        <button
-                            onClick={() => setUserMenuOpen(!isUserMenuOpen)}
-                            className="flex items-center gap-3 hover:bg-muted/50 p-2 rounded-lg transition-colors border border-transparent hover:border-border outline-none focus:ring-2 focus:ring-primary/20"
-                        >
-                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
-                                {user.avatar}
-                            </div>
-                            <span className="text-sm font-medium hidden sm:block">{user.name}</span>
-                            <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
-                        </button>
+                    {/* Right side: Theme Toggle + User Dropdown */}
+                    <div className="flex items-center gap-2">
+                        <ThemeToggle />
 
-                        <AnimatePresence>
-                            {isUserMenuOpen && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    className="absolute right-0 top-full mt-2 w-56 bg-card border border-border rounded-xl shadow-lg py-1 z-50 overflow-hidden"
-                                >
-                                    <div className="px-4 py-3 border-b border-border bg-muted/30">
-                                        <p className="text-sm font-medium">{user.name}</p>
-                                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                                    </div>
-                                    <Link
-                                        to="/dashboard/profile"
-                                        className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-muted transition-colors"
-                                        onClick={() => setUserMenuOpen(false)}
+                        {/* User Dropdown */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setUserMenuOpen(!isUserMenuOpen)}
+                                className="flex items-center gap-3 hover:bg-muted/50 p-2 rounded-lg transition-colors border border-transparent hover:border-border outline-none focus:ring-2 focus:ring-primary/20"
+                            >
+                                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                                    {user.avatar}
+                                </div>
+                                <span className="text-sm font-medium hidden sm:block">{user.name}</span>
+                                <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            <AnimatePresence>
+                                {isUserMenuOpen && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        className="absolute right-0 top-full mt-2 w-56 bg-card border border-border rounded-xl shadow-lg py-1 z-50 overflow-hidden"
                                     >
-                                        <User className="w-4 h-4 text-muted-foreground" />
-                                        Profile Settings
-                                    </Link>
-                                    <div className="h-px bg-border my-1" />
-                                    <button
-                                        onClick={handleLogout}
-                                        className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-                                    >
-                                        <LogOut className="w-4 h-4" />
-                                        Sign Out
-                                    </button>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                                        <div className="px-4 py-3 border-b border-border bg-muted/30">
+                                            <p className="text-sm font-medium">{user.name}</p>
+                                            <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                                        </div>
+                                        <Link
+                                            to="/dashboard/profile"
+                                            className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-muted transition-colors"
+                                            onClick={() => setUserMenuOpen(false)}
+                                        >
+                                            <User className="w-4 h-4 text-muted-foreground" />
+                                            Profile Settings
+                                        </Link>
+                                        <div className="h-px bg-border my-1" />
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                        >
+                                            <LogOut className="w-4 h-4" />
+                                            Sign Out
+                                        </button>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </header>
 
