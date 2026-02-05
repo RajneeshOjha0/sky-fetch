@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Terminal, Lock, Mail, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { login } from '../api';
+import ThemeToggle from '../components/ThemeToggle';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -36,7 +37,12 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
+        <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4 relative">
+            {/* Theme Toggle in top-right corner */}
+            <div className="absolute top-4 right-4">
+                <ThemeToggle />
+            </div>
+
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
