@@ -24,7 +24,7 @@ class WatcherService {
      */
     async start() {
         if (!this.historyPath || !fs.existsSync(this.historyPath)) {
-            console.error(chalk.red(`Error: History file not found at path: ${this.historyPath}`));
+            console.error(chalk.red(`Error: History file not found at path:  ${this.historyPath}`));
             return;
         }
 
@@ -33,11 +33,11 @@ class WatcherService {
             const stats = fs.statSync(this.historyPath);
             this.lastSize = stats.size;
         } catch (error) {
-            console.error(chalk.red(`Error accessing history file: ${error.message}`));
+            console.error(chalk.red(`[WatcherService] Error accessing history file: ${error.message}`));
             return;
         }
 
-        console.log(chalk.blue(`Monitoring history file: ${this.historyPath}`));
+        console.log(chalk.blue(`[WatcherService] Monitoring history file: ${this.historyPath}`));
 
         this.watcher = chokidar.watch(this.historyPath, {
             persistent: true,
