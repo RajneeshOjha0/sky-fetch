@@ -9,7 +9,7 @@ module.exports = async (command, options) => {
     // Reconstruct the full command string for display/logging
     const fullCommand = command.join(' ');
     if (!fullCommand) {
-        console.error(chalk.red('Error: No command provided.'));
+        console.error(chalk.red('[runCommand] Error: No command provided.'));
         return;
     }
 
@@ -21,9 +21,9 @@ module.exports = async (command, options) => {
     if (excludePattern) {
         try {
             excludeRegex = new RegExp(excludePattern);
-            console.log(chalk.dim(`Excluding logs matching: ${excludePattern}`));
+            console.log(chalk.dim(`[runCommand] Excluding logs matching: ${excludePattern}`));
         } catch (e) {
-            console.error(chalk.red(`Error: Invalid regex pattern: ${excludePattern}`));
+            console.error(chalk.red(`[runCommand] Error: Invalid regex pattern: ${excludePattern}`));
             return;
         }
     }
