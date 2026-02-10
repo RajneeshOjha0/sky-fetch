@@ -56,12 +56,12 @@ class ApiService {
             return response.data;
         } catch (error) {
             if (error.code === 'ECONNREFUSED') {
-                throw new Error(`Connection refused: Unable to reach API at ${this.getBaseUrl()}`);
+                throw new Error(`Connection refused: [ApiService] Unable to reach API at ${this.getBaseUrl()}`);
             }
             if (error.response) {
                 // Handle specific HTTP error codes if needed
                 if (error.response.status === 401) {
-                    throw new Error('Authentication failed: Invalid API Key.');
+                    throw new Error('Authentication failed: Invalid API Key. [ApiService]');
                 }
                 throw new Error(`API Request failed with status ${error.response.status}: ${error.response.statusText}`);
             }
