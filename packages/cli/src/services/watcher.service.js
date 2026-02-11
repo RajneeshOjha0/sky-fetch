@@ -46,7 +46,7 @@ class WatcherService {
         });
 
         this.watcher.on('change', () => this.onFileChange());
-        this.watcher.on('error', (error) => console.error(chalk.red(`Watcher error: ${error.message}`)));
+        this.watcher.on('error', (error) => console.error(chalk.red(`[WatcherService] Watcher error: ${error.message}`)));
     }
 
     /**
@@ -95,7 +95,7 @@ class WatcherService {
                 this.lastSize = newSize;
             }
         } catch (error) {
-            console.error(chalk.red(`Error processing file change: ${error.message}`));
+            console.error(chalk.red(`[WatcherService] Error processing file change: ${error.message}`));
         }
     }
 }
