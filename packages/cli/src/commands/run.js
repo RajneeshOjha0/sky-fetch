@@ -28,7 +28,7 @@ module.exports = async (command, options) => {
         }
     }
 
-    console.log(chalk.cyan(`> Running: ${fullCommand}`));
+    console.log(chalk.cyan(`[runCommand] Running: ${fullCommand}`));
 
     const bufferService = new BufferService();
     bufferService.start();
